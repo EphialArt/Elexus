@@ -1,0 +1,3 @@
+C:\Users\USER\source\repos\Elexus\obj\Debug\net7.0-windows\Elexus.csproj.AssemblyReference.cache
+C:\Users\USER\source\repos\Elexus\obj\Debug\net7.0-windows\App.g.cs
+C:\Users\USER\source\repos\Elexus\obj\Debug\net7.0-windows\Elexus_MarkupCompile.cache

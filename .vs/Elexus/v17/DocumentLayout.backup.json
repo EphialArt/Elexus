@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USER\\source\\repos\\Elexus\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\source\\repos\\elexus\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\source\\repos\\elexus\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\source\\repos\\elexus\\elexus.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:elexus.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Elexus.csproj",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\Elexus\\Elexus.csproj",
+              "RelativeDocumentMoniker": "Elexus.csproj",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\Elexus\\Elexus.csproj",
+              "RelativeToolTip": "Elexus.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-12-05T14:10:34.092Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\Elexus\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\Elexus\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-05T13:48:46.92Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\Elexus\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\Elexus\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwCYAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-05T13:12:10.821Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
