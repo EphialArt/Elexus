@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Elexus")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf4337b370d2da195b137bf3d9e64cd7358f730b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Elexus")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Elexus")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

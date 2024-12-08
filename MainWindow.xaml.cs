@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf;
+﻿using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using HelixToolkit.Wpf.SharpDX;
 
 namespace Elexus
 {
@@ -10,52 +10,37 @@ namespace Elexus
         public MainWindow()
         {
             InitializeComponent();
+            SetViewportBackground();
+            View1.MouseDown3D += View1_MouseDown3DHandler;
         }
 
-        private void AddPartButton_Click(object sender, RoutedEventArgs e)
+        private void SetViewportBackground()
         {
-            // Create the cube's geometry
-            var cube = new MeshGeometry3D();
-
-            // Define cube vertices
-            cube.Positions = new Point3DCollection
+            var color = new System.Windows.Media.Color
             {
-                new Point3D(0, 0, 0), // Bottom face
-                new Point3D(1, 0, 0),
-                new Point3D(1, 1, 0),
-                new Point3D(0, 1, 0),
-                new Point3D(0, 0, 1), // Top face
-                new Point3D(1, 0, 1),
-                new Point3D(1, 1, 1),
-                new Point3D(0, 1, 1)
+                A = 255,
+                R = 30,
+                G = 30,
+                B = 30
             };
-
-            // Define cube triangles (indices)
-            cube.TriangleIndices = new Int32Collection
-            {
-                0, 1, 2, 0, 2, 3, // Bottom
-                4, 5, 6, 4, 6, 7, // Top
-                0, 4, 7, 0, 7, 3, // Left
-                1, 5, 6, 1, 6, 2, // Right
-                3, 7, 6, 3, 6, 2, // Front
-                0, 4, 5, 0, 5, 1  // Back
-            };
-
-            // Create material for the cube
-            var material = new MaterialGroup();
-            material.Children.Add(new DiffuseMaterial(new SolidColorBrush(Colors.Gray)));
-            material.Children.Add(new SpecularMaterial(new SolidColorBrush(Colors.White), 30));
-            var cubeModel = new GeometryModel3D(cube, material);
-
-            // Add the cube to the viewport
-            var modelVisual = new ModelVisual3D { Content = cubeModel };
-            HelixView.Children.Add(modelVisual);
+            View1.Background = new System.Windows.Media.SolidColorBrush(color);
         }
 
-        private void SaveModelButton_Click(object sender, RoutedEventArgs e)
+        private void View1_MouseDown3DHandler(object sender, MouseDown3DEventArgs e)
         {
-            // Code to save the model (e.g., serialize to a file, etc.)
-            MessageBox.Show("Model saved successfully.");
+            var viewModel = DataContext as MainViewModel;
+            viewModel?.OnMouseDown3DHandler(sender, e);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Any initialization logic can be added here if needed
+        }
+
+        private void Viewport3DX_CameraChanged(object sender, RoutedEventArgs e)
+        {
+            var viewModel = DataContext as MainViewModel;
+            viewModel?.UpdateGrid(viewModel.Camera.Position);
         }
     }
 }

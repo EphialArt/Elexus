@@ -1,0 +1,6 @@
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net4.8-windows\Elexus.csproj.AssemblyReference.cache
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net4.8-windows\MainWindow.g.cs
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net4.8-windows\App.g.cs
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net4.8-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net4.8-windows\Elexus_MarkupCompile.cache
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net4.8-windows\Elexus_MarkupCompile.lref
