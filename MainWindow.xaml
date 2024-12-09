@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ie="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sdxm="clr-namespace:SharpDX;assembly=SharpDX.Mathematics"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:Elexus"
         Title="Elexus"
         Width="800"
         Height="500"
@@ -16,9 +15,6 @@
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        <hx:RenderTechniqueConverter x:Key="RenderTechniqueConverter" />
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -35,50 +31,42 @@
         </Menu>
 
         <hx:Viewport3DX Grid.Row="1"
-                        x:Name="View1"
+                        x:Name="view1"
                         Title="{Binding Title}"
                         Camera="{Binding Camera}"
-                        CameraChanged="Viewport3DX_CameraChanged"
-                        MouseDown3D="View1_OnMouseDown3DHandler"
-                        CoordinateSystemLabelForeground="Black"
                         EffectsManager="{Binding EffectsManager}"
                         ShowCoordinateSystem="True"
                         SubTitle="{Binding SubTitle}"
-                        Background="#FF1E1E1E"
-                        TextBrush="Black"
-                        UseDefaultGestures="False">
+                        Background="Black"
+                        UseDefaultGestures="True">
             <hx:Viewport3DX.InputBindings>
                 <KeyBinding Command="{Binding AddPartCommand}" Key="N" Modifiers="Shift" />
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="RightClick" />
                 <MouseBinding Command="hx:ViewportCommands.Zoom" Gesture="MiddleClick" />
-                <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="Shift+RightClick" />
+                <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="Shift+MiddleClick" />
             </hx:Viewport3DX.InputBindings>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDown3D">
-                    <ie:CallMethodAction MethodName="OnMouseDown3DHandler" TargetObject="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+
             <hx:AmbientLight3D Color="{Binding AmbientLightColor}" />
             <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}" Color="{Binding DirectionalLightColor}" />
+
             <hx:LineGeometryModel3D x:Name="grid"
                                     Geometry="{Binding Grid}"
                                     Transform="{Binding GridTransform}"
-                                    Color="LightGray"
+                                    Color="{Binding GridColor}"
                                     Thickness="0.3"/>
             <hx:LineGeometryModel3D x:Name="axisX" Geometry="{Binding AxisX}" Color="Red" Thickness="0.5"/>
             <hx:LineGeometryModel3D x:Name="axisY" Geometry="{Binding AxisY}" Color="Green" Thickness="0.5"/>
-            <hx:MeshGeometryModel3D x:Name="model1b"
+
+            <hx:MeshGeometryModel3D x:Name="mesh1"
                                     Geometry="{Binding Model}"
                                     Material="{x:Static hx:PhongMaterials.Chrome}" />
-            <hx:MeshGeometryModel3D x:Name="selectedModel"
-                                    Geometry="{Binding SelectedModel}"
-                                    Material="{x:Static hx:PhongMaterials.LightBlue}" />
-            <hx:BillboardTextModel3D Geometry="{Binding Text3D}" />
-            <hx:TransformManipulator3D
-                x:Name="manipulator"
-                CenterOffset="{Binding CenterOffset}"
-                SizeScale="1"
-                Target="{Binding Target}" />
+
+            <hx:PostEffectMeshBorderHighlight
+                x:Name="borderEffect"
+                EffectName="highlight"
+                Color="Red"
+                NumberOfBlurPass="2"
+                DrawMode="{Binding DrawMode}" />
         </hx:Viewport3DX>
 
         <StatusBar Grid.Row="1" VerticalAlignment="Bottom">
@@ -88,19 +76,19 @@
             <StatusBarItem>
                 <TextBlock HorizontalAlignment="Left"
                            VerticalAlignment="Top"
-                           Text="{Binding FrameRate, ElementName=View1, StringFormat=D3D11 - \{0:0.00\} FPS}" />
+                           Text="{Binding FrameRate, ElementName=view1, StringFormat=D3D11 - {0:0.00} FPS}" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
-                <TextBlock Text="{Binding Camera.Position, StringFormat=Position: \{0:0.0\}}" />
+                <TextBlock Text="{Binding Camera.Position, StringFormat=Position: {0:0.0}}" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
-                <TextBlock Text="{Binding Camera.LookDirection, StringFormat=LookDirection: \{0:0.0\}}" />
+                <TextBlock Text="{Binding Camera.LookDirection, StringFormat=LookDirection: {0:0.0}}" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
-                <TextBlock Text="{Binding Camera.UpDirection, StringFormat=UpDirection: \{0:0.0\}}" />
+                <TextBlock Text="{Binding Camera.UpDirection, StringFormat=UpDirection: {0:0.0}}" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

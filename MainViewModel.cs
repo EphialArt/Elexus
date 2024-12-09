@@ -11,7 +11,6 @@ using Color = System.Windows.Media.Color;
 using Colors = System.Windows.Media.Colors;
 using Media3D = System.Windows.Media.Media3D;
 using MvvmHelpers.Commands;
-using System.Windows.Media.Media3D; // Ensure this is included
 
 namespace Elexus
 {
@@ -20,7 +19,6 @@ namespace Elexus
         public string Title { get; private set; }
         public string SubTitle { get; private set; }
         public MeshGeometry3D Model { get; private set; }
-        public MeshGeometry3D SelectedModel { get; private set; }
         public LineGeometry3D Grid { get; private set; }
         public LineGeometry3D AxisX { get; private set; }
         public LineGeometry3D AxisY { get; private set; }
@@ -31,8 +29,28 @@ namespace Elexus
         public PerspectiveCamera Camera { get; private set; }
         public DefaultEffectsManager EffectsManager { get; private set; }
         public Media3D.Transform3D GridTransform { get; private set; }
-        public Transform3D SelectedModelTransform { get; private set; }
+        public Element3D Target { get; set; }
         public ICommand AddPartCommand { get; private set; }
+
+        private OutlineMode drawMode = OutlineMode.Merged;
+        public OutlineMode DrawMode
+        {
+            get => drawMode;
+            set => SetProperty(ref drawMode, value);
+        }
+
+        private bool highlightSeparated = false;
+        public bool HighlightSeparated
+        {
+            get => highlightSeparated;
+            set
+            {
+                if (SetProperty(ref highlightSeparated, value))
+                {
+                    DrawMode = value ? OutlineMode.Separated : OutlineMode.Merged;
+                }
+            }
+        }
 
         public MainViewModel()
         {
@@ -86,7 +104,7 @@ namespace Elexus
             {
                 meshBuilder.AddLine(new Vector3(i, 0, minZ), new Vector3(i, 0, maxZ));
             }
-            for (int j = minZ; j <= maxZ; j++)
+            for (int j = minZ; j <= maxX; j++)
             {
                 meshBuilder.AddLine(new Vector3(minX, 0, j), new Vector3(maxX, 0, j));
             }
@@ -101,9 +119,14 @@ namespace Elexus
             return meshBuilder.ToLineGeometry3D();
         }
 
+        public void UpdateGrid(Point3D cameraPosition)
+        {
+            this.Grid = GenerateGrid(cameraPosition);
+            OnPropertyChanged(nameof(Grid));
+        }
+
         private void AddPart()
         {
-            // Logic to add a part
             var meshBuilder = new MeshBuilder();
             meshBuilder.AddBox(new Vector3(0, 0, 0), 1, 1, 1);
             var newMesh = meshBuilder.ToMeshGeometry3D();
@@ -111,21 +134,6 @@ namespace Elexus
 
             this.Model = newMesh;
             OnPropertyChanged(nameof(Model));
-        }
-
-        public void UpdateGrid(Point3D cameraPosition)
-        {
-            this.Grid = GenerateGrid(cameraPosition);
-            OnPropertyChanged(nameof(Grid));
-        }
-
-        public void OnMouseDown3DHandler(object sender, MouseDown3DEventArgs e)
-        {
-            if (e.HitTestResult != null && e.HitTestResult.ModelHit is MeshGeometryModel3D m && m.Geometry == Model)
-            {
-                SelectedModel = Model; // Logic to highlight the model goes here
-                OnPropertyChanged(nameof(SelectedModel));
-            }
         }
     }
 }
