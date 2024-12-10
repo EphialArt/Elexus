@@ -59,8 +59,59 @@
 
             <hx:MeshGeometryModel3D x:Name="mesh1"
                                     Geometry="{Binding Model}"
-                                    Material="{x:Static hx:PhongMaterials.Chrome}" />
+                                    Material="{x:Static hx:PhongMaterials.Chrome}" 
+                                    Transform="{Binding ModelTransform, Mode=TwoWay}"/>
+            <hx:TransformManipulator3D
+                                    x:Name="manipulator"
+                                    CenterOffset="{Binding CenterOffset}"
+                                    SizeScale="1"
+                                    Target="{Binding Target}" IsHitTestVisible="True" AlwaysHittable="False" />
+            <!--<hx:UITranslateManipulator3D
+                x:Name="translateX"
+                Direction="1,0,0"
+                Material="{x:Static hx:PhongMaterials.Red}"
+                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
+                Transform="{Binding Transform, ElementName=selectedModel.name}"
+                Offset="1,0,0" />
 
+            <hx:UITranslateManipulator3D
+                x:Name="translateY"
+                Direction="0,1,0"
+                Material="{x:Static hx:PhongMaterials.Green}"
+                TargetTransform="{Binding Transform, ElementName=model2}"
+                Transform="{Binding Transform, ElementName=model2}"
+                Offset="0,1,0" />
+
+            <hx:UITranslateManipulator3D
+                x:Name="translateZ"
+                Direction="0,0,1"
+                Material="{x:Static hx:PhongMaterials.Blue}"
+                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
+                Transform="{Binding Transform, ElementName=selectedModel.name}"
+                Offset="0,0,1" />
+
+            <hx:UIRotateManipulator3D
+                x:Name="rotateX"
+                Axis="1,0,0"
+                InnerDiameter="2"
+                Material="{x:Static hx:PhongMaterials.Red}"
+                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
+                Transform="{Binding Transform, ElementName=selectedModel.name}" />
+
+            <hx:UIRotateManipulator3D
+                x:Name="rotateY"
+                Axis="0,1,0"
+                InnerDiameter="2"
+                Material="{x:Static hx:PhongMaterials.Green}"
+                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
+                Transform="{Binding Transform, ElementName=selectedModel.name}" />
+            <hx:UIRotateManipulator3D
+                x:Name="rotateZ"
+                Axis="0,0,1"
+                InnerDiameter="2"
+                Material="{x:Static hx:PhongMaterials.Blue}"
+                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
+                Transform="{Binding Transform, ElementName=selectedModel.name}" />-->
             <hx:PostEffectMeshBorderHighlight
                 x:Name="borderEffect"
                 EffectName="highlight"

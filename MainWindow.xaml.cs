@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
+using SharpDX;
 
 namespace Elexus
 {
@@ -20,22 +22,41 @@ namespace Elexus
 
         private void View1_MouseDown3DHandler(object sender, RoutedEventArgs e)
         {
-            if (e is MouseDown3DEventArgs args && args.HitTestResult != null)
+            if (e is MouseDown3DEventArgs args && args.HitTestResult != null && args.HitTestResult.ModelHit is MeshGeometryModel3D)
             {
-                // Clear existing effect
-                if (selectedModel != null)
-                {
-                    selectedModel.PostEffects = null;
-                }
+                // Check if the hit object is not part of the manipulator
+                var hitModel = args.HitTestResult.ModelHit as GeometryModel3D;
+                if (hitModel != null && hitModel.Name != "" && hitModel != manipulator.Target)
+                {   Console.WriteLine(hitModel.Name);
+                    // Clear existing effect
+                    if (selectedModel != null)
+                    {
+                        selectedModel.PostEffects = null;
+                    }
 
-                selectedModel = args.HitTestResult.ModelHit as GeometryModel3D;
+                    selectedModel = hitModel;
+                    
 
-                // Ensure only specific models get highlighted
-                if (selectedModel != null && selectedModel.Name != "grid" && selectedModel.Name != "axisX" && selectedModel.Name != "axisY")
-                {
-                    selectedModel.PostEffects = "highlight";
+                    // Ensure only specific models get highlighted
+                    if (selectedModel.Name != "grid" && selectedModel.Name != "axisX" && selectedModel.Name != "axisY" && selectedModel.Name != "") 
+                    {
+                        selectedModel.PostEffects = "highlight";
+
+                        var viewModel = DataContext as MainViewModel;
+                        if (viewModel != null)
+                        {
+                            viewModel.Target = null;
+                            viewModel.CenterOffset = selectedModel.Geometry.Bound.Center; // Must update this before updating target
+                            viewModel.Target = selectedModel;
+                        }
+                    }
                 }
             }
         }
+        private void ToggleManipulatorHitTest(bool enable) { manipulator.IsHitTestVisible = enable; }
+
+
+
+
     }
 }

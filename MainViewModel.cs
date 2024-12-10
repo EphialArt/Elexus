@@ -11,6 +11,9 @@ using Color = System.Windows.Media.Color;
 using Colors = System.Windows.Media.Colors;
 using Media3D = System.Windows.Media.Media3D;
 using MvvmHelpers.Commands;
+using System.Windows.Media.Media3D;
+using System.Collections.ObjectModel;
+using GeometryModel3D = HelixToolkit.Wpf.SharpDX.GeometryModel3D;
 
 namespace Elexus
 {
@@ -23,13 +26,15 @@ namespace Elexus
         public LineGeometry3D AxisX { get; private set; }
         public LineGeometry3D AxisY { get; private set; }
         public SharpDX.Color GridColor { get; private set; }
+        public Transform3D ModelTransform { get; set; }
         public Color DirectionalLightColor { get; private set; }
         public Color AmbientLightColor { get; private set; }
         public BillboardText3D Text3D { get; set; } = new BillboardText3D { IsDynamic = true };
         public PerspectiveCamera Camera { get; private set; }
         public DefaultEffectsManager EffectsManager { get; private set; }
+        public ObservableCollection<GeometryModel3D> PartsCollection { get; private set; }
+
         public Media3D.Transform3D GridTransform { get; private set; }
-        public Element3D Target { get; set; }
         public ICommand AddPartCommand { get; private set; }
 
         private OutlineMode drawMode = OutlineMode.Merged;
@@ -38,6 +43,16 @@ namespace Elexus
             get => drawMode;
             set => SetProperty(ref drawMode, value);
         }
+        private Element3D target; private Vector3 centerOffset; 
+        public Element3D Target 
+        { 
+            get => target; set => SetProperty(ref target, value); 
+        }
+        public Vector3 CenterOffset 
+        { 
+            get => centerOffset; set => SetProperty(ref centerOffset, value); 
+        }
+
 
         private bool highlightSeparated = false;
         public bool HighlightSeparated
@@ -61,13 +76,19 @@ namespace Elexus
             // Camera setup
             this.Camera = new PerspectiveCamera
             {
-                Position = new Point3D(4.4, 2.2, -4.4),
+                Position = new Point3D(0, 0, -4.4),
                 LookDirection = new Vector3D(0, -4, 10),
                 UpDirection = new Vector3D(0, 1, 0)
             };
 
+            // Parts Collection
+            this.PartsCollection = new ObservableCollection<GeometryModel3D>();
+
             // Effects Manager
             this.EffectsManager = new DefaultEffectsManager();
+
+            // Transforms
+            this.ModelTransform = new TranslateTransform3D(0, 0, 0);
 
             // Lighting setup
             this.AmbientLightColor = Colors.Black;
@@ -128,7 +149,7 @@ namespace Elexus
         private void AddPart()
         {
             var meshBuilder = new MeshBuilder();
-            meshBuilder.AddBox(new Vector3(0, 0, 0), 1, 1, 1);
+            meshBuilder.AddBox(new Vector3(0, 5, 0), 1, 1, 1);
             var newMesh = meshBuilder.ToMeshGeometry3D();
             newMesh.Colors = new Color4Collection(newMesh.TextureCoordinates.ToList().ConvertAll(x => x.ToColor4()));
 
