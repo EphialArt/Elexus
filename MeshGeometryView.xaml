@@ -1,0 +1,7 @@
+﻿<UserControl x:Class="Elexus.MeshGeometryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:hx="http://helix-toolkit.org/wpf/SharpDX">
+    <hx:MeshGeometryModel3D Geometry="{Binding Geometry, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                             Material="{Binding Material, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+</UserControl>

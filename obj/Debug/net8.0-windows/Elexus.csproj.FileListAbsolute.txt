@@ -166,3 +166,5 @@ C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net8.0-windows\refint\Elexus.dll
 C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net8.0-windows\Elexus.pdb
 C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net8.0-windows\Elexus.genruntimeconfig.cache
 C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net8.0-windows\ref\Elexus.dll
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net8.0-windows\MeshGeometryView.baml
+C:\Users\USER\Documents\GitHub\Elexus\obj\Debug\net8.0-windows\MeshGeometryView.g.cs

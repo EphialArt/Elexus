@@ -5,7 +5,6 @@
         xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Elexus"
         Title="Elexus"
         Width="800"
@@ -37,10 +36,17 @@
                         EffectsManager="{Binding EffectsManager}"
                         ShowCoordinateSystem="True"
                         SubTitle="{Binding SubTitle}"
-                        Background="Black"
-                        UseDefaultGestures="True">
+                        Background="{Binding Background}"
+                        BackgroundColor="#1E1E1E">
             <hx:Viewport3DX.InputBindings>
-                <KeyBinding Command="{Binding AddPartCommand}" Key="N" Modifiers="Shift" />
+                <KeyBinding Command="{Binding CopyCommand}" Key="C" Modifiers="Control" />
+                <KeyBinding Command="{Binding PasteCommand}" Key="V" Modifiers="Control" />
+                <KeyBinding Command="{Binding DuplicateCommand}" Key="D" Modifiers="Control" />
+                <KeyBinding Command="{Binding ShowAddMeshPopupCommand}" Key="N" Modifiers="Shift" />
+                <KeyBinding Command="{Binding EnableTranslateCommand}" Key="G" />
+                <KeyBinding Command="{Binding EnableScaleCommand}" Key="S" />
+                <KeyBinding Command="{Binding EnableRotateCommand}" Key="R" />
+                <KeyBinding Command="{Binding DeleteMeshCommand}" Key="Delete" />
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="RightClick" />
                 <MouseBinding Command="hx:ViewportCommands.Zoom" Gesture="MiddleClick" />
                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="Shift+MiddleClick" />
@@ -52,73 +58,47 @@
             <hx:LineGeometryModel3D x:Name="grid"
                                     Geometry="{Binding Grid}"
                                     Transform="{Binding GridTransform}"
-                                    Color="{Binding GridColor}"
+                                    Color="#FF646464"
                                     Thickness="0.3"/>
             <hx:LineGeometryModel3D x:Name="axisX" Geometry="{Binding AxisX}" Color="Red" Thickness="0.5"/>
             <hx:LineGeometryModel3D x:Name="axisY" Geometry="{Binding AxisY}" Color="Green" Thickness="0.5"/>
 
-            <hx:MeshGeometryModel3D x:Name="mesh1"
-                                    Geometry="{Binding Model}"
-                                    Material="{x:Static hx:PhongMaterials.Chrome}" 
-                                    Transform="{Binding ModelTransform, Mode=TwoWay}"/>
+            <hx:GroupModel3D>
+                <hx:GroupModel3D.Children>
+                    <hx:ItemsModel3D ItemsSource="{Binding PartsCollection}">
+                        <hx:ItemsModel3D.ItemTemplate>
+                            <DataTemplate>
+                                <hx:MeshGeometryModel3D x:Name="Mesh" Geometry="{Binding Geometry}"
+                                                        Material="{Binding Material}" 
+                                                        IsHitTestVisible="True" />
+                            </DataTemplate>
+                        </hx:ItemsModel3D.ItemTemplate>
+                    </hx:ItemsModel3D>
+                </hx:GroupModel3D.Children>
+            </hx:GroupModel3D>
+
             <hx:TransformManipulator3D
-                                    x:Name="manipulator"
-                                    CenterOffset="{Binding CenterOffset}"
-                                    SizeScale="1"
-                                    Target="{Binding Target}" IsHitTestVisible="True" AlwaysHittable="False" />
-            <!--<hx:UITranslateManipulator3D
-                x:Name="translateX"
-                Direction="1,0,0"
-                Material="{x:Static hx:PhongMaterials.Red}"
-                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
-                Transform="{Binding Transform, ElementName=selectedModel.name}"
-                Offset="1,0,0" />
-
-            <hx:UITranslateManipulator3D
-                x:Name="translateY"
-                Direction="0,1,0"
-                Material="{x:Static hx:PhongMaterials.Green}"
-                TargetTransform="{Binding Transform, ElementName=model2}"
-                Transform="{Binding Transform, ElementName=model2}"
-                Offset="0,1,0" />
-
-            <hx:UITranslateManipulator3D
-                x:Name="translateZ"
-                Direction="0,0,1"
-                Material="{x:Static hx:PhongMaterials.Blue}"
-                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
-                Transform="{Binding Transform, ElementName=selectedModel.name}"
-                Offset="0,0,1" />
-
-            <hx:UIRotateManipulator3D
-                x:Name="rotateX"
-                Axis="1,0,0"
-                InnerDiameter="2"
-                Material="{x:Static hx:PhongMaterials.Red}"
-                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
-                Transform="{Binding Transform, ElementName=selectedModel.name}" />
-
-            <hx:UIRotateManipulator3D
-                x:Name="rotateY"
-                Axis="0,1,0"
-                InnerDiameter="2"
-                Material="{x:Static hx:PhongMaterials.Green}"
-                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
-                Transform="{Binding Transform, ElementName=selectedModel.name}" />
-            <hx:UIRotateManipulator3D
-                x:Name="rotateZ"
-                Axis="0,0,1"
-                InnerDiameter="2"
-                Material="{x:Static hx:PhongMaterials.Blue}"
-                TargetTransform="{Binding Transform, ElementName=selectedModel.name}"
-                Transform="{Binding Transform, ElementName=selectedModel.name}" />-->
+                x:Name="manipulator"
+                CenterOffset="{Binding CenterOffset}"
+                SizeScale="1"
+                Target="{Binding Target}" EnableRotation="False" EnableScaling="False" IsRendering="False" />
             <hx:PostEffectMeshBorderHighlight
                 x:Name="borderEffect"
                 EffectName="highlight"
-                Color="Red"
+                Color="#FFA75DC9"
                 NumberOfBlurPass="2"
                 DrawMode="{Binding DrawMode}" />
         </hx:Viewport3DX>
+
+        <Popup x:Name="AddMeshPopup" Placement="Mouse" IsOpen="{Binding IsAddMeshPopupOpen}">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10">
+                <StackPanel>
+                    <Button Command="{Binding AddBoxCommand}" Content="Add Box" Margin="5" />
+                    <Button Command="{Binding AddSphereCommand}" Content="Add Sphere" Margin="5" />
+                    <Button Command="{Binding AddCylinderCommand}" Content="Add Cylinder" Margin="5" />
+                </StackPanel>
+            </Border>
+        </Popup>
 
         <StatusBar Grid.Row="1" VerticalAlignment="Bottom">
             <StatusBar.Background>

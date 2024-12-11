@@ -8,10 +8,13 @@ namespace Elexus
     public partial class MainWindow : Window
     {
         private GeometryModel3D selectedModel;
+        public TransformManipulator3D Manipulator { get; private set; }
+        public int Index { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            Manipulator = manipulator;
             view1.MouseDown3D += View1_MouseDown3DHandler;
         }
 
@@ -20,14 +23,14 @@ namespace Elexus
             view1.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
         }
 
-        private void View1_MouseDown3DHandler(object sender, RoutedEventArgs e)
+        public void View1_MouseDown3DHandler(object sender, RoutedEventArgs e)
         {
-            if (e is MouseDown3DEventArgs args && args.HitTestResult != null && args.HitTestResult.ModelHit is MeshGeometryModel3D)
+            if (e is MouseDown3DEventArgs args && args.HitTestResult != null && args.HitTestResult.ModelHit is MeshGeometryModel3D hitModel)
             {
                 // Check if the hit object is not part of the manipulator
-                var hitModel = args.HitTestResult.ModelHit as GeometryModel3D;
                 if (hitModel != null && hitModel.Name != "" && hitModel != manipulator.Target)
-                {   Console.WriteLine(hitModel.Name);
+                {
+
                     // Clear existing effect
                     if (selectedModel != null)
                     {
@@ -35,10 +38,10 @@ namespace Elexus
                     }
 
                     selectedModel = hitModel;
-                    
+                    manipulator.IsRendering = true;
 
                     // Ensure only specific models get highlighted
-                    if (selectedModel.Name != "grid" && selectedModel.Name != "axisX" && selectedModel.Name != "axisY" && selectedModel.Name != "") 
+                    if (selectedModel.Name != "grid" && selectedModel.Name != "axisX" && selectedModel.Name != "axisY" && selectedModel.Name != "")
                     {
                         selectedModel.PostEffects = "highlight";
 
@@ -48,14 +51,17 @@ namespace Elexus
                             viewModel.Target = null;
                             viewModel.CenterOffset = selectedModel.Geometry.Bound.Center; // Must update this before updating target
                             viewModel.Target = selectedModel;
+
+                            // Set SelectedPart and log index
+                            viewModel.SelectedPart = hitModel;
+
+                            // Get and log the index of the selected part
+                            int index = viewModel.PartsCollection.IndexOf(viewModel.SelectedPart);
                         }
                     }
                 }
             }
         }
-        private void ToggleManipulatorHitTest(bool enable) { manipulator.IsHitTestVisible = enable; }
-
-
 
 
     }
