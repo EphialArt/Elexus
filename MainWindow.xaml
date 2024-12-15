@@ -14,6 +14,9 @@
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -99,6 +102,44 @@
                 </StackPanel>
             </Border>
         </Popup>
+
+        <!-- Transformation Panel -->
+        <Border Visibility="{Binding IsTransformationPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="10" Background="LightGray" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Transformations" FontWeight="Bold" Margin="0,0,0,10" />
+                <!-- Position -->
+                <TextBlock Text="Position (meters)" Margin="0,0,0,5" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshPositionX}" Margin="0,0,10,0" />
+                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshPositionY}" Margin="0,0,10,0" />
+                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshPositionZ}" />
+                </StackPanel>
+                <!-- Scale -->
+                <TextBlock Text="Scale (meters)" Margin="10,0,0,5" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshScaleX}" Margin="0,0,10,0" />
+                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshScaleY}" Margin="0,0,10,0" />
+                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshScaleZ}" />
+                </StackPanel>
+                <!-- Rotation -->
+                <TextBlock Text="Rotation (degrees)" Margin="10,0,0,5" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshRotationX}" Margin="0,0,10,0" />
+                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshRotationY}" Margin="0,0,10,0" />
+                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshRotationZ}" />
+                </StackPanel>
+                <Button Content="Apply Transformations" Command="{Binding ApplyTransformationsCommand}" Margin="10,0,0,10" />
+            </StackPanel>
+        </Border>
 
         <StatusBar Grid.Row="1" VerticalAlignment="Bottom">
             <StatusBar.Background>

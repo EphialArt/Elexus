@@ -54,7 +54,7 @@ namespace Elexus {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Elexus;V1.0.0.0;component/meshgeometryview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Elexus;component/meshgeometryview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\MeshGeometryView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

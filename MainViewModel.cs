@@ -24,6 +24,8 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
+using Matrix = SharpDX.Matrix;
+using Quaternion = SharpDX.Quaternion;
 
 namespace Elexus
 {
@@ -74,13 +76,36 @@ namespace Elexus
         {
             get => centerOffset; set => SetProperty(ref centerOffset, value);
         }
-        private MeshGeometryModel3D selectedPart;
+        private MeshGeometryModel3D _selectedPart;
         public MeshGeometryModel3D SelectedPart
         {
-            get => selectedPart; set => SetProperty(ref selectedPart, value);
+            get => _selectedPart; set { _selectedPart = value; 
+                OnPropertyChanged(nameof(SelectedPart)); 
+                UpdateTransformationPanel(); 
+            }
         }
-
+        private double _selectedMeshPositionX;
+        private double _selectedMeshPositionY;
+        private double _selectedMeshPositionZ;
+        private double _selectedMeshScaleX = 1;
+        private double _selectedMeshScaleY = 1;
+        private double _selectedMeshScaleZ = 1;
+        private double _selectedMeshRotationX;
+        private double _selectedMeshRotationY;
+        private double _selectedMeshRotationZ;
+        private bool _isTransformationPanelVisible;
         private bool highlightSeparated = false;
+        public double SelectedMeshPositionX { get => _selectedMeshPositionX; set { _selectedMeshPositionX = value; OnPropertyChanged(nameof(SelectedMeshPositionX)); } }
+        public double SelectedMeshPositionY { get => _selectedMeshPositionY; set { _selectedMeshPositionY = value; OnPropertyChanged(nameof(SelectedMeshPositionY)); } }
+        public double SelectedMeshPositionZ { get => _selectedMeshPositionZ; set { _selectedMeshPositionZ = value; OnPropertyChanged(nameof(SelectedMeshPositionZ)); } }
+        public double SelectedMeshScaleX { get => _selectedMeshScaleX; set { _selectedMeshScaleX = value; OnPropertyChanged(nameof(SelectedMeshScaleX)); } }
+        public double SelectedMeshScaleY { get => _selectedMeshScaleY; set { _selectedMeshScaleY = value; OnPropertyChanged(nameof(SelectedMeshScaleY)); } }
+        public double SelectedMeshScaleZ { get => _selectedMeshScaleZ; set { _selectedMeshScaleZ = value; OnPropertyChanged(nameof(SelectedMeshScaleZ)); } }
+        public double SelectedMeshRotationX { get => _selectedMeshRotationX; set { _selectedMeshRotationX = value; OnPropertyChanged(nameof(SelectedMeshRotationX)); } }
+        public double SelectedMeshRotationY { get => _selectedMeshRotationY; set { _selectedMeshRotationY = value; OnPropertyChanged(nameof(SelectedMeshRotationY)); } }
+        public double SelectedMeshRotationZ { get => _selectedMeshRotationZ; set { _selectedMeshRotationZ = value; OnPropertyChanged(nameof(SelectedMeshRotationZ)); } }
+        public bool IsTransformationPanelVisible { get => _isTransformationPanelVisible; set { _isTransformationPanelVisible = value; OnPropertyChanged(nameof(IsTransformationPanelVisible)); } }
+        public ICommand ApplyTransformationsCommand { get; }
         public bool HighlightSeparated
         {
             get => highlightSeparated;
@@ -165,6 +190,7 @@ namespace Elexus
             this.CopyCommand = new RelayCommand(_ => CopySelectedMesh());
             this.PasteCommand = new RelayCommand(_ => PasteCopiedMeshes());
             this.DuplicateCommand = new RelayCommand(_ => DuplicateSelectedMesh());
+            this.ApplyTransformationsCommand = new RelayCommand(_ => ApplyTransformations());
         }
 
 
@@ -206,15 +232,32 @@ namespace Elexus
         private void AddBox()
         {
             var meshBuilder = new MeshBuilder();
-            meshBuilder.AddBox(new Vector3(0, 0, 0), 1, 1, 1);
+            meshBuilder.AddBox(new Vector3(0, 0, 0), 1, 1, 1); 
             AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome);
         }
-
-        private void AddSphere()
-        {
-            var meshBuilder = new MeshBuilder();
-            meshBuilder.AddSphere(new Vector3(0, 0, 0), 1);
+        private void AddSphere() 
+        { 
+            var meshBuilder = new MeshBuilder(); 
+            meshBuilder.AddSphere(new Vector3(0, 0, 0), 1, 40, 40);
             AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome);
+        }
+        private void PerformCGALOperation()
+        {
+            // Assuming you have a selected mesh from PartsCollection
+            var selectedMesh = PartsCollection.FirstOrDefault() as MeshGeometryModel3D;
+
+            if (selectedMesh != null && selectedMesh.Geometry is MeshGeometry3D meshGeometry)
+            {
+                var cgalMesh = CGALWrapper.ConvertToCGALMesh(meshGeometry);
+
+                // Perform some CGAL operations here
+                cgalMesh.Subdivide(2);
+                cgalMesh.Simplify(0.5);
+
+                // Convert back to HelixToolkit mesh
+                var modifiedMesh = CGALWrapper.ConvertToManagedMesh(cgalMesh);
+                selectedMesh.Geometry = modifiedMesh;
+            }
         }
 
         private void AddCylinder()
@@ -222,6 +265,7 @@ namespace Elexus
             var meshBuilder = new MeshBuilder();
             meshBuilder.AddCylinder(new Vector3(0, 0, 0), new Vector3(0, 6, 0), 1, 20);
             AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome);
+            IsAddMeshPopupOpen = false;
         }
 
         private void AddMeshToCollection(MeshGeometry3D mesh, PhongMaterial material)
@@ -346,5 +390,88 @@ namespace Elexus
                 PartsCollection.Add(clonedMesh);
             }
         }
+
+        private void UpdateTransformationPanel()
+        {
+            if (SelectedPart != null)
+            {
+                // Assuming the mesh's transform is a MatrixTransform3D
+                if (SelectedPart.Transform is MatrixTransform3D transform)
+                {
+                    var matrix = ConvertToSharpDXMatrix(transform.Matrix);
+
+                    SelectedMeshPositionX = matrix.M41;
+                    SelectedMeshPositionY = matrix.M42;
+                    SelectedMeshPositionZ = matrix.M43;
+
+                    // Decompose the matrix to get scale and rotation
+                    var scale = new Vector3();
+                    var rotation = new Quaternion();
+                    var translation = new Vector3(matrix.M41, matrix.M42, matrix.M43);
+                    matrix.Decompose(out scale, out rotation, out translation);
+
+                    SelectedMeshScaleX = scale.X;
+                    SelectedMeshScaleY = scale.Y;
+                    SelectedMeshScaleZ = scale.Z;
+
+                    var eulerAngles = ToEulerAngles(rotation);
+                    SelectedMeshRotationX = eulerAngles.X * (180 / Math.PI);
+                    SelectedMeshRotationY = eulerAngles.Y * (180 / Math.PI);
+                    SelectedMeshRotationZ = eulerAngles.Z * (180 / Math.PI);
+
+                    IsTransformationPanelVisible = true;
+                }
+            }
+            else
+            {
+                IsTransformationPanelVisible = false;
+            }
+        }
+
+
+        private void ApplyTransformations()
+        {
+            if (SelectedPart != null)
+            {
+                var translationMatrix = Matrix.Translation((float)SelectedMeshPositionX, (float)SelectedMeshPositionY, (float)SelectedMeshPositionZ);
+                var scaleMatrix = Matrix.Scaling((float)SelectedMeshScaleX, (float)SelectedMeshScaleY, (float)SelectedMeshScaleZ);
+                var rotationMatrix = Matrix.RotationYawPitchRoll(
+                    (float)(SelectedMeshRotationY * Math.PI / 180),
+                    (float)(SelectedMeshRotationX * Math.PI / 180),
+                    (float)(SelectedMeshRotationZ * Math.PI / 180)
+                );
+
+                var transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+                var media3DMatrix = new Matrix3D(
+                    transformMatrix.M11, transformMatrix.M12, transformMatrix.M13, transformMatrix.M14,
+                    transformMatrix.M21, transformMatrix.M22, transformMatrix.M23, transformMatrix.M24,
+                    transformMatrix.M31, transformMatrix.M32, transformMatrix.M33, transformMatrix.M34,
+                    transformMatrix.M41, transformMatrix.M42, transformMatrix.M43, transformMatrix.M44
+                );
+
+                SelectedPart.Transform = new MatrixTransform3D(media3DMatrix);
+            }
+        }
+
+
+        private Matrix ConvertToSharpDXMatrix(Matrix3D matrix3D)
+        {
+            return new Matrix(
+                (float)matrix3D.M11, (float)matrix3D.M12, (float)matrix3D.M13, (float)matrix3D.M14,
+                (float)matrix3D.M21, (float)matrix3D.M22, (float)matrix3D.M23, (float)matrix3D.M24,
+                (float)matrix3D.M31, (float)matrix3D.M32, (float)matrix3D.M33, (float)matrix3D.M34,
+                (float)matrix3D.OffsetX, (float)matrix3D.OffsetY, (float)matrix3D.OffsetZ, (float)matrix3D.M44
+            );
+        }
+
+        private Vector3 ToEulerAngles(Quaternion q)
+        {
+            // Convert Quaternion to Euler angles
+            float x = (float)Math.Atan2(2.0 * (q.W * q.X + q.Y * q.Z), 1.0 - 2.0 * (q.X * q.X + q.Y * q.Y));
+            float y = (float)Math.Asin(2.0 * (q.W * q.Y - q.Z * q.X));
+            float z = (float)Math.Atan2(2.0 * (q.W * q.Z + q.X * q.Y), 1.0 - 2.0 * (q.Y * q.Y + q.Z * q.Z));
+            return new Vector3(x, y, z);
+        }
     }
 }
+

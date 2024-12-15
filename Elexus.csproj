@@ -14,11 +14,21 @@
 		<PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="OpenTK" Version="4.9.1" />
-		<PackageReference Include="OpenTK.GLControl" Version="4.0.1" />
-		<PackageReference Include="OpenTK.GLWpfControl" Version="4.3.3" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 		<PackageReference Include="SharpDX" Version="4.2.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="CGALDotNet">
+	    <HintPath>..\..\..\Downloads\CGALDotNet-master\CGALDotNet-master\Binaries\CGALDotNet.dll</HintPath>
+	  </Reference>
+	  <Reference Include="CGALDotNetGeometry">
+	    <HintPath>..\..\..\Downloads\CGALDotNet-master\CGALDotNet-master\Binaries\CGALDotNetGeometry.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="xcopy /Y /I &quot;C:\Users\USER\Downloads\CGALDotNet-master\CGALDotNet-master\Binaries\mpfr-6.dll&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;xcopy /Y /I &quot;C:\Users\USER\Downloads\CGALDotNet-master\CGALDotNet-master\Binaries\gm.dll&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;xcopy /Y /I &quot;C:\Users\USER\Downloads\CGALDotNet-master\CGALDotNet-master\Binaries\CGALWrapper.dll&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;" />
+	</Target>
 
 </Project>

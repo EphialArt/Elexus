@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\cgalwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:cgalwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -15,16 +19,8 @@
       "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\elexus.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:elexus.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\GitHub\\Elexus\\obj\\Debug\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:obj\\Debug\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
@@ -52,14 +48,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
               "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-08T15:42:38.815Z",
+              "WhenOpened": "2024-12-15T19:08:03.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CGALWrapper.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\CGALWrapper.cs",
+              "RelativeDocumentMoniker": "CGALWrapper.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\CGALWrapper.cs",
+              "RelativeToolTip": "CGALWrapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T14:12:23.019Z",
               "EditorCaption": ""
             },
             {
@@ -70,48 +79,22 @@
               "RelativeDocumentMoniker": "MainViewModel.cs",
               "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainViewModel.cs",
               "RelativeToolTip": "MainViewModel.cs",
-              "ViewState": "AgIAAN0AAAAAAAAAAAAYwPIAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAANkAAAAAAAAAAAAuwOsAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T16:23:52.617Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAAACQAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAtwBEAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-05T13:12:10.821Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "RelayCommand.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\RelayCommand.cs",
-              "RelativeDocumentMoniker": "RelayCommand.cs",
-              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\RelayCommand.cs",
-              "RelativeToolTip": "RelayCommand.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAADwvx4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-11T12:10:36.778Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": ".NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\obj\\Debug\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
-              "RelativeDocumentMoniker": "obj\\Debug\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
-              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\obj\\Debug\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
-              "RelativeToolTip": "obj\\Debug\\net8.0-windows\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T15:45:42.655Z",
               "EditorCaption": ""
             }
           ]
