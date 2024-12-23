@@ -3,12 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Elexus"
         Title="Elexus"
-        Width="800"
-        Height="500"
+        Width="1200"
+        Height="800"
         mc:Ignorable="d"
         Loaded="Window_Loaded">
     <Window.DataContext>
@@ -17,29 +16,85 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" VerticalAlignment="Top">
-            <Menu.Background>
-                <SolidColorBrush Opacity="0.5" Color="WhiteSmoke" />
-            </Menu.Background>
-            <MenuItem Header="View">
-                <MenuItem Command="hx:ViewportCommands.ZoomExtents" Header="Zoom extents" />
-            </MenuItem>
-        </Menu>
+    <DockPanel>
 
-        <hx:Viewport3DX Grid.Row="1"
-                        x:Name="view1"
+        <!-- Sidebar Panel for Mesh Explorer and Properties -->
+        <StackPanel DockPanel.Dock="Right" Width="300" Background="#FF1E1B20" >
+            <!-- Mesh Explorer -->
+            <StackPanel Height="157">
+                <TextBlock Text="Mesh Explorer" FontWeight="Bold" Foreground="White" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="-2.126"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="-0.296"/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <ListView x:Name="objectview" ItemsSource="{Binding PartsCollection}" SelectedItem="{Binding SelectedPart}" SelectionChanged="ListView_SelectionChanged" Background="#FF1E1B20" BorderBrush="{x:Null}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" Margin="0,0,10,0" HorizontalAlignment="Stretch" Foreground="White" SelectionTextBrush="{x:Null}" Background="#FF1E1B20" BorderBrush="#FF1E1B20"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackPanel>
+            <!-- Transformation Panel -->
+            <StackPanel Margin="10,0,0,10">
+                <TextBlock Text="Transformations" FontWeight="Bold" Margin="0,0,0,10" />
+                <!-- Position -->
+                <TextBlock Text="Position (meters)" Margin="0,0,0,5" Foreground="White" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshPositionX}" IsEnabled="{Binding IsTransformationPanelVisible}" Margin="0,0,10,0" Background="#FF888C98" />
+                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshPositionY}" IsEnabled="{Binding IsTransformationPanelVisible}" Margin="0,0,10,0" Background="#FF888C98"/>
+                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshPositionZ}" IsEnabled="{Binding IsTransformationPanelVisible}" Background="#FF888C98"/>
+                </StackPanel>
+                <!-- Scale -->
+                <TextBlock Text="Scale (meters)" Margin="10,0,0,5" Foreground="White" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshScaleX}" IsEnabled="{Binding IsTransformationPanelVisible}" Margin="0,0,10,0" Background="#FF888C98"/>
+                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshScaleY}" IsEnabled="{Binding IsTransformationPanelVisible}" Margin="0,0,10,0" Background="#FF888C98"/>
+                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshScaleZ}" IsEnabled="{Binding IsTransformationPanelVisible}" Background="#FF888C98" />
+                </StackPanel>
+                <!-- Rotation -->
+                <TextBlock Text="Rotation (degrees)" Margin="10,0,0,5" Foreground="White" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshRotationX}" IsEnabled="{Binding IsTransformationPanelVisible}" Margin="0,0,10,0" Background="#FF888C98" />
+                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshRotationY}" IsEnabled="{Binding IsTransformationPanelVisible}" Margin="0,0,10,0" Background="#FF888C98" />
+                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                    <TextBox Width="60" Text="{Binding SelectedMeshRotationZ}" IsEnabled="{Binding IsTransformationPanelVisible}" Background="#FF888C98"/>
+                </StackPanel>
+                <!-- Sphere Radius -->
+                <TextBlock Text="Sphere Radius (meters)" Margin="10,0,0,5" Foreground="White" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="R:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White"/>
+                    <TextBox Width="60" Text="{Binding SelectedMeshRadius}" IsEnabled="{Binding IsSphereSelected}" Margin="0,0,10,0" Background="#FF888C98" />
+                </StackPanel>
+                <Button Content="Apply Transformations" Command="{Binding ApplyTransformationsCommand}" Margin="10,0,0,10" IsEnabled="{Binding IsTransformationPanelVisible}" Background="#FF888C98" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Viewport -->
+        <hx:Viewport3DX x:Name="view1"
                         Title="{Binding Title}"
                         Camera="{Binding Camera}"
                         EffectsManager="{Binding EffectsManager}"
                         ShowCoordinateSystem="True"
                         SubTitle="{Binding SubTitle}"
-                        Background="{Binding Background}"
+                        Background="#1E1E1E"
                         BackgroundColor="#1E1E1E">
             <hx:Viewport3DX.InputBindings>
                 <KeyBinding Command="{Binding CopyCommand}" Key="C" Modifiers="Control" />
@@ -73,7 +128,8 @@
                             <DataTemplate>
                                 <hx:MeshGeometryModel3D x:Name="Mesh" Geometry="{Binding Geometry}"
                                                         Material="{Binding Material}" 
-                                                        IsHitTestVisible="True" />
+                                                        IsHitTestVisible="True"
+                                                        MouseDown="View1_MouseDown3DHandler" DataContext="{Binding Mode=OneWay}" />
                             </DataTemplate>
                         </hx:ItemsModel3D.ItemTemplate>
                     </hx:ItemsModel3D>
@@ -93,75 +149,15 @@
                 DrawMode="{Binding DrawMode}" />
         </hx:Viewport3DX>
 
-        <Popup x:Name="AddMeshPopup" Placement="Mouse" IsOpen="{Binding IsAddMeshPopupOpen}">
+        <!-- Add Mesh Popup -->
+        <Popup x:Name="AddMeshPopup" IsOpen="False" AutomationProperties.IsOffscreenBehavior="Onscreen" Placement="Mouse">
             <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10">
                 <StackPanel>
                     <Button Command="{Binding AddBoxCommand}" Content="Add Box" Margin="5" />
                     <Button Command="{Binding AddSphereCommand}" Content="Add Sphere" Margin="5" />
-                    <Button Command="{Binding AddCylinderCommand}" Content="Add Cylinder" Margin="5" />
+                    <Button Command="{Binding AddCylinderCommand}" Content="Add Sphere" Margin="5"/>
                 </StackPanel>
             </Border>
         </Popup>
-
-        <!-- Transformation Panel -->
-        <Border Visibility="{Binding IsTransformationPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="10" Background="LightGray" Padding="10">
-            <StackPanel>
-                <TextBlock Text="Transformations" FontWeight="Bold" Margin="0,0,0,10" />
-                <!-- Position -->
-                <TextBlock Text="Position (meters)" Margin="0,0,0,5" />
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshPositionX}" Margin="0,0,10,0" />
-                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshPositionY}" Margin="0,0,10,0" />
-                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshPositionZ}" />
-                </StackPanel>
-                <!-- Scale -->
-                <TextBlock Text="Scale (meters)" Margin="10,0,0,5" />
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshScaleX}" Margin="0,0,10,0" />
-                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshScaleY}" Margin="0,0,10,0" />
-                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshScaleZ}" />
-                </StackPanel>
-                <!-- Rotation -->
-                <TextBlock Text="Rotation (degrees)" Margin="10,0,0,5" />
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshRotationX}" Margin="0,0,10,0" />
-                    <TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshRotationY}" Margin="0,0,10,0" />
-                    <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0" />
-                    <TextBox Width="60" Text="{Binding SelectedMeshRotationZ}" />
-                </StackPanel>
-                <Button Content="Apply Transformations" Command="{Binding ApplyTransformationsCommand}" Margin="10,0,0,10" />
-            </StackPanel>
-        </Border>
-
-        <StatusBar Grid.Row="1" VerticalAlignment="Bottom">
-            <StatusBar.Background>
-                <SolidColorBrush Opacity="0.5" Color="WhiteSmoke" />
-            </StatusBar.Background>
-            <StatusBarItem>
-                <TextBlock HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           Text="{Binding FrameRate, ElementName=view1, StringFormat=D3D11 - {0:0.00} FPS}" />
-            </StatusBarItem>
-            <Separator />
-            <StatusBarItem>
-                <TextBlock Text="{Binding Camera.Position, StringFormat=Position: {0:0.0}}" />
-            </StatusBarItem>
-            <Separator />
-            <StatusBarItem>
-                <TextBlock Text="{Binding Camera.LookDirection, StringFormat=LookDirection: {0:0.0}}" />
-            </StatusBarItem>
-            <Separator />
-            <StatusBarItem>
-                <TextBlock Text="{Binding Camera.UpDirection, StringFormat=UpDirection: {0:0.0}}" />
-            </StatusBarItem>
-        </StatusBar>
-    </Grid>
+    </DockPanel>
 </Window>

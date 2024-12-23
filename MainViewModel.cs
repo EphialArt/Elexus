@@ -26,6 +26,12 @@ using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using Matrix = SharpDX.Matrix;
 using Quaternion = SharpDX.Quaternion;
+using Point = SharpDX.Point;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Markup;
+using System.Text.RegularExpressions;
+
 
 namespace Elexus
 {
@@ -44,6 +50,7 @@ namespace Elexus
         public BillboardText3D Text3D { get; set; } = new BillboardText3D { IsDynamic = true };
         public PerspectiveCamera Camera { get; private set; }
         private List<MeshGeometryModel3D> clipboard = new List<MeshGeometryModel3D>();
+        private List<int> clipboard_index = new();
         public DefaultEffectsManager EffectsManager { get; private set; }
         public ObservableCollection<Element3D> PartsCollection { get; private set; }
 
@@ -60,7 +67,9 @@ namespace Elexus
         public ICommand EnableScaleCommand { get; private set; }
         public ICommand EnableRotateCommand { get; private set; }
         public ICommand DeleteMeshCommand { get; private set; }
-
+        public ICommand RenameMeshCommand { get; }
+        public ICommand SelectMeshCommand { get; }
+        public ICommand ApplyTransformationsCommand { get; }
         private OutlineMode drawMode = OutlineMode.Merged;
         public OutlineMode DrawMode
         {
@@ -79,9 +88,11 @@ namespace Elexus
         private MeshGeometryModel3D _selectedPart;
         public MeshGeometryModel3D SelectedPart
         {
-            get => _selectedPart; set { _selectedPart = value; 
-                OnPropertyChanged(nameof(SelectedPart)); 
-                UpdateTransformationPanel(); 
+            get => _selectedPart; set
+            {
+                _selectedPart = value;
+                OnPropertyChanged(nameof(SelectedPart));
+                UpdateTransformationPanel();
             }
         }
         private double _selectedMeshPositionX;
@@ -95,6 +106,7 @@ namespace Elexus
         private double _selectedMeshRotationZ;
         private bool _isTransformationPanelVisible;
         private bool highlightSeparated = false;
+        private string _newMeshName;
         public double SelectedMeshPositionX { get => _selectedMeshPositionX; set { _selectedMeshPositionX = value; OnPropertyChanged(nameof(SelectedMeshPositionX)); } }
         public double SelectedMeshPositionY { get => _selectedMeshPositionY; set { _selectedMeshPositionY = value; OnPropertyChanged(nameof(SelectedMeshPositionY)); } }
         public double SelectedMeshPositionZ { get => _selectedMeshPositionZ; set { _selectedMeshPositionZ = value; OnPropertyChanged(nameof(SelectedMeshPositionZ)); } }
@@ -105,7 +117,27 @@ namespace Elexus
         public double SelectedMeshRotationY { get => _selectedMeshRotationY; set { _selectedMeshRotationY = value; OnPropertyChanged(nameof(SelectedMeshRotationY)); } }
         public double SelectedMeshRotationZ { get => _selectedMeshRotationZ; set { _selectedMeshRotationZ = value; OnPropertyChanged(nameof(SelectedMeshRotationZ)); } }
         public bool IsTransformationPanelVisible { get => _isTransformationPanelVisible; set { _isTransformationPanelVisible = value; OnPropertyChanged(nameof(IsTransformationPanelVisible)); } }
-        public ICommand ApplyTransformationsCommand { get; }
+
+        private double _addMeshPopupHorizontalOffset;
+        private double _addMeshPopupVerticalOffset;
+        public double AddMeshPopupHorizontalOffset
+        {
+            get => _addMeshPopupHorizontalOffset;
+            set
+            {
+                _addMeshPopupHorizontalOffset = value;
+                OnPropertyChanged(nameof(AddMeshPopupHorizontalOffset));
+            }
+        }
+        public double AddMeshPopupVerticalOffset
+        {
+            get => _addMeshPopupVerticalOffset;
+            set
+            {
+                _addMeshPopupVerticalOffset = value;
+                OnPropertyChanged(nameof(AddMeshPopupVerticalOffset));
+            }
+        }
         public bool HighlightSeparated
         {
             get => highlightSeparated;
@@ -115,6 +147,18 @@ namespace Elexus
                 {
                     DrawMode = value ? OutlineMode.Separated : OutlineMode.Merged;
                 }
+            }
+        }
+        public string NewMeshName 
+        { 
+            get => _newMeshName; 
+            set 
+            {
+                if (_newMeshName != value) 
+                {
+                    _newMeshName = value;
+                    OnPropertyChanged();
+                } 
             }
         }
         private Brush background;
@@ -127,12 +171,17 @@ namespace Elexus
             }
         }
 
-        private bool isAddMeshPopupOpen;
+        private bool _isAddMeshPopupOpen = false;
         public bool IsAddMeshPopupOpen
         {
-            get => isAddMeshPopupOpen;
-            set => SetProperty(ref isAddMeshPopupOpen, value);
+            get => _isAddMeshPopupOpen;
+            set
+            {
+                _isAddMeshPopupOpen = value;
+                OnPropertyChanged(nameof(IsAddMeshPopupOpen));
+            }
         }
+
 
         public MainViewModel()
         {
@@ -150,12 +199,6 @@ namespace Elexus
 
             // Parts Collection
             this.PartsCollection = new ObservableCollection<Element3D>();
-
-            // Commands
-            AddBoxCommand = new Command(AddBox);
-            AddSphereCommand = new Command(AddSphere);
-            AddCylinderCommand = new Command(AddCylinder);
-            ShowAddMeshPopupCommand = new Command(ShowAddMeshPopup);
 
             // Effects Manager
             this.EffectsManager = new DefaultEffectsManager();
@@ -183,6 +226,10 @@ namespace Elexus
             Background = Brushes.LightBlue;
 
             // Command setup
+            this.AddBoxCommand = new Command(AddBox);
+            this.AddSphereCommand = new Command(AddSphere);
+            this.AddCylinderCommand = new Command(AddCylinder);
+            this.ShowAddMeshPopupCommand = new RelayCommand(_ => ShowAddMeshPopup());
             this.EnableTranslateCommand = new RelayCommand(_ => EnableTranslate());
             this.EnableScaleCommand = new RelayCommand(_ => EnableScale());
             this.EnableRotateCommand = new RelayCommand(_ => EnableRotate());
@@ -232,14 +279,14 @@ namespace Elexus
         private void AddBox()
         {
             var meshBuilder = new MeshBuilder();
-            meshBuilder.AddBox(new Vector3(0, 0, 0), 1, 1, 1); 
-            AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome);
+            meshBuilder.AddBox(new Vector3(0, 0, 0), 1, 1, 1);
+            AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome, "Cube");
         }
-        private void AddSphere() 
-        { 
-            var meshBuilder = new MeshBuilder(); 
+        private void AddSphere()
+        {
+            var meshBuilder = new MeshBuilder();
             meshBuilder.AddSphere(new Vector3(0, 0, 0), 1, 40, 40);
-            AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome);
+            AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome, "Sphere");
         }
         private void PerformCGALOperation()
         {
@@ -264,22 +311,58 @@ namespace Elexus
         {
             var meshBuilder = new MeshBuilder();
             meshBuilder.AddCylinder(new Vector3(0, 0, 0), new Vector3(0, 6, 0), 1, 20);
-            AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome);
-            IsAddMeshPopupOpen = false;
+            AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome, "Cylinder");
         }
 
-        private void AddMeshToCollection(MeshGeometry3D mesh, PhongMaterial material)
+        private string MeshNaming(string name = null)
+        {
+            string result = null;
+            string pattern = @"(\D+)\d*$";
+
+            if (name != null)
+            {
+                result = Regex.Replace(name, pattern, "$1");
+            }
+            else
+            {
+                foreach (Element3D mesh in PartsCollection)
+                {
+                    if (Regex.IsMatch(mesh.Name, pattern))
+                    {
+                        result = Regex.Replace(mesh.Name, pattern, "$1");
+                    }
+                }
+            }
+
+            int count = 0;
+            string baseName = result;
+            while (PartsCollection.Any(m => m.Name.Equals(result)))
+            {
+                result = baseName + count;
+                count++;
+            }
+
+            return result;
+        }
+
+
+
+        private void AddMeshToCollection(MeshGeometry3D mesh, PhongMaterial material, String name)
         {
             var newPart = new MeshGeometryModel3D
             {
                 Geometry = mesh,
                 Material = material,
-                IsHitTestVisible = true
+                IsHitTestVisible = true,
+                Name = name
             };
-
+            newPart.PostEffects = "Wireframe";
             PartsCollection.Add(newPart);
+            var newPartNumber = 
+            newPart.Name = MeshNaming();
             OnPropertyChanged(nameof(PartsCollection));
-            IsAddMeshPopupOpen = false;
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+            mainWindow.AddMeshPopup.IsOpen = false;
         }
 
         private void EnableTranslate()
@@ -313,9 +396,10 @@ namespace Elexus
             }
         }
 
-        private void ShowAddMeshPopup()
+        public void ShowAddMeshPopup()
         {
-            IsAddMeshPopupOpen = true;
+        var mainWindow = (MainWindow)Application.Current.MainWindow;
+        mainWindow.AddMeshPopup.IsOpen = true;
         }
         private void DeleteSelectedMesh()
         {
@@ -355,6 +439,7 @@ namespace Elexus
         }
         private void CopySelectedMesh()
         {
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
             if (SelectedPart != null)
             {
                 clipboard.Clear();
@@ -365,16 +450,25 @@ namespace Elexus
         {
             foreach (var mesh in clipboard)
             {
+                string name = null;
+                foreach (var part in PartsCollection)
+                {
+                    if (part is MeshGeometryModel3D meshPart && meshPart.Geometry.Equals(mesh.Geometry) &&
+                        meshPart.Material.Equals(mesh.Material))
+                    {
+                        name = part.Name;
+                    }
+                }
                 var clonedMesh = new MeshGeometryModel3D
                 {
                     Geometry = mesh.Geometry,
                     Material = mesh.Material,
                     Transform = mesh.Transform.Clone(),
+                    Name = MeshNaming(name),
                     IsHitTestVisible = true
                 };
                 PartsCollection.Add(clonedMesh);
             }
-            clipboard.Clear();
         }
         private void DuplicateSelectedMesh()
         {
@@ -472,6 +566,44 @@ namespace Elexus
             float z = (float)Math.Atan2(2.0 * (q.W * q.Z + q.X * q.Y), 1.0 - 2.0 * (q.Y * q.Y + q.Z * q.Z));
             return new Vector3(x, y, z);
         }
+        private void OnSelectedPartChanged()
+        {
+            // Clear the highlight effect from the previously selected part
+            foreach (var part in PartsCollection)
+            {
+                // Clear any previous highlight effect (e.g., reset the material)
+            }
+
+            // Handle the logic for when a part is selected from the explorer
+            if (_selectedPart != null)
+            {
+                // Apply highlight effect to the selected part
+                _selectedPart.Material = PhongMaterials.Red; // Use a different material to highlight
+            }
+        }
+
+        private void RenameMesh(object parameter)
+        {
+            if (SelectedPart != null)
+            {
+                SelectedPart.Name = NewMeshName; 
+                OnPropertyChanged(nameof(PartsCollection)); 
+                // Refresh the list
+                }
+        } private void SelectMesh(object parameter) 
+        { 
+            if (parameter is MeshGeometryModel3D mesh) 
+            {
+                SelectedPart = mesh; 
+            } 
+        }
+        public event PropertyChangedEventHandler PropertyChanged; 
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) 
+        { 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); 
+        }
+
+
     }
 }
 
