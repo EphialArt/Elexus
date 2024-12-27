@@ -288,25 +288,7 @@ namespace Elexus
             meshBuilder.AddSphere(new Vector3(0, 0, 0), 1, 40, 40);
             AddMeshToCollection(meshBuilder.ToMeshGeometry3D(), PhongMaterials.Chrome, "Sphere");
         }
-        private void PerformCGALOperation()
-        {
-            // Assuming you have a selected mesh from PartsCollection
-            var selectedMesh = PartsCollection.FirstOrDefault() as MeshGeometryModel3D;
-
-            if (selectedMesh != null && selectedMesh.Geometry is MeshGeometry3D meshGeometry)
-            {
-                var cgalMesh = CGALWrapper.ConvertToCGALMesh(meshGeometry);
-
-                // Perform some CGAL operations here
-                cgalMesh.Subdivide(2);
-                cgalMesh.Simplify(0.5);
-
-                // Convert back to HelixToolkit mesh
-                var modifiedMesh = CGALWrapper.ConvertToManagedMesh(cgalMesh);
-                selectedMesh.Geometry = modifiedMesh;
-            }
-        }
-
+       
         private void AddCylinder()
         {
             var meshBuilder = new MeshBuilder();
@@ -345,8 +327,6 @@ namespace Elexus
             return result;
         }
 
-
-
         private void AddMeshToCollection(MeshGeometry3D mesh, PhongMaterial material, String name)
         {
             var newPart = new MeshGeometryModel3D
@@ -363,6 +343,25 @@ namespace Elexus
             OnPropertyChanged(nameof(PartsCollection));
             var mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.AddMeshPopup.IsOpen = false;
+        }
+
+        private void PerformCGALOperation()
+        {
+            // Assuming you have a selected mesh from PartsCollection
+            var selectedMesh = PartsCollection.FirstOrDefault() as MeshGeometryModel3D;
+
+            if (selectedMesh != null && selectedMesh.Geometry is MeshGeometry3D meshGeometry)
+            {
+                var cgalMesh = CGALWrapper.ConvertToCGALMesh(meshGeometry);
+
+                // Perform some CGAL operations here
+                cgalMesh.Subdivide(2);
+                cgalMesh.Simplify(0.5);
+
+                // Convert back to HelixToolkit mesh
+                var modifiedMesh = CGALWrapper.ConvertToManagedMesh(cgalMesh);
+                selectedMesh.Geometry = modifiedMesh;
+            }
         }
 
         private void EnableTranslate()

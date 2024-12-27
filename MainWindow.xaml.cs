@@ -1,21 +1,23 @@
-﻿using System;
+﻿using SharpDX;
 using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
-using System.Windows.Input;
-using SharpDX;
+using HelixToolkit.Wpf.SharpDX.Cameras;
+using HelixToolkit.Wpf.SharpDX.Extensions;
+using System.Linq;
+using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Threading;
+using System;
 
 namespace Elexus
 {
     public partial class MainWindow : Window
     {
-        private GeometryModel3D selectedModel;
+        private HelixToolkit.Wpf.SharpDX.GeometryModel3D selectedModel;
         private Popup popup;
         private ListView listView;
         public TransformManipulator3D Manipulator { get; private set; }
-        public int Index { get; private set; }
 
         public MainWindow()
         {
@@ -24,110 +26,154 @@ namespace Elexus
             popup = AddMeshPopup;
             listView = objectview;
             view1.MouseDown3D += View1_MouseDown3DHandler;
+
+            this.Loaded += MainWindow_Loaded; // Add Loaded event handler
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            view1.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            // Perform initialization tasks after components are loaded
         }
 
         public void View1_MouseDown3DHandler(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as MainViewModel;
 
-            if (e is MouseDown3DEventArgs args && args.HitTestResult != null && args.HitTestResult.ModelHit is MeshGeometryModel3D hitModel && Mouse.LeftButton == MouseButtonState.Pressed)
+            if (e is MouseDown3DEventArgs args && args.HitTestResult?.ModelHit is MeshGeometryModel3D hitModel && Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                // Check if the hit object is not part of the manipulator
-                if (hitModel != null && hitModel.Name != "" && hitModel != manipulator.Target)
+                if (hitModel.Name != "" && hitModel != manipulator.Target)
                 {
-                    // Clear existing effect
-                    if (selectedModel != null)
-                    {
-                        selectedModel.PostEffects = null;
-                    }
-                    selectedModel = hitModel;
-                    manipulator.IsRendering = true;
-                    AddMeshPopup.IsOpen = false;
-                    // Ensure only specific models get highlighted
-                    if (selectedModel.Name != "grid" && selectedModel.Name != "axisX" && selectedModel.Name != "axisY" && selectedModel.Name != "")
-                    {
-                        selectedModel.PostEffects = "highlight";
+                    HighlightModel(viewModel, hitModel);
 
-                        if (viewModel != null)
-                        {
-                            viewModel.Target = null;
-                            viewModel.CenterOffset = selectedModel.Geometry.Bound.Center; // Must update this before updating target
-                            viewModel.Target = selectedModel;
-
-                            // Set SelectedPart and log index
-                            viewModel.SelectedPart = hitModel;
-
-                            // Get and log the index of the selected part
-                            int index = viewModel.PartsCollection.IndexOf(viewModel.SelectedPart);
-                            Index = index;
-                            objectview.SelectedItem = viewModel.PartsCollection[index];
-                        }
-                    }
-                    else
+                    if (viewModel?.PartsCollection != null)
                     {
-                        selectedModel.PostEffects = null;
-                        manipulator.IsRendering = false;
+                        objectview.SelectedItem = viewModel.PartsCollection.FirstOrDefault(part =>
+                            part is MeshGeometryModel3D meshPart &&
+                            meshPart.Geometry.Equals(hitModel.Geometry) &&
+                            meshPart.Material.Equals(hitModel.Material));
                     }
                 }
             }
-            else if (e is MouseDown3DEventArgs args2 && args2.HitTestResult == null && Mouse.LeftButton == MouseButtonState.Pressed )
+            else if (Mouse.LeftButton == MouseButtonState.Pressed) // Clicked empty space
             {
-                AddMeshPopup.IsOpen = false;
-                // Clear existing effect when clicking on empty space
-                if (selectedModel != null)
-                {
-                    selectedModel.PostEffects = null;
-                    manipulator.IsRendering = false;
-                }
+                ClearSelection(viewModel);
+            }
+        }
 
-                if (viewModel != null)
-                {
-                    viewModel.Target = null;
-                    viewModel.SelectedPart = null;
-                    var mainWindow = (MainWindow)Application.Current.MainWindow;
-                }
-            }
-            else
+        private void HighlightModel(MainViewModel viewModel, MeshGeometryModel3D model)
+        {
+            if (selectedModel != null)
             {
-                AddMeshPopup.IsOpen = false;
+                selectedModel.PostEffects = null;
             }
+
+            selectedModel = model;
+            selectedModel.PostEffects = "highlight";
+            manipulator.IsRendering = true;
+
+            if (viewModel != null)
+            {
+                viewModel.Target = null;
+                viewModel.Target = selectedModel;
+                viewModel.CenterOffset = selectedModel.Geometry.Bound.Center;
+                viewModel.SelectedPart = selectedModel as MeshGeometryModel3D;
+            }
+        }
+
+        private void ClearSelection(MainViewModel viewModel)
+        {
+            if (selectedModel != null)
+            {
+                selectedModel.PostEffects = null;
+                selectedModel = null;
+            }
+
+            manipulator.IsRendering = false;
+
+            if (viewModel != null)
+            {
+                viewModel.Target = null;
+                viewModel.SelectedPart = null;
+            }
+
+            objectview.SelectedItem = null;
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (objectview.SelectedItem is MeshGeometryModel3D selectedMesh)
+            var selectedMesh = objectview.SelectedItem as MeshGeometryModel3D;
+            if (selectedMesh != null)
             {
-                var viewModel = DataContext as MainViewModel;
-                // Set the selected mesh in the 3D view
-                selectedModel = selectedMesh;
-                manipulator.IsRendering = true;
-
-                // Apply highlight effect
-                selectedModel.PostEffects = "highlight";
-
-                // Update 3D view and manipulator
-                viewModel.SelectedPart = selectedMesh;
-
-                // Set the target, etc.
-                viewModel.CenterOffset = selectedModel.Geometry.Bound.Center;
-                viewModel.Target = selectedModel;
+                // Simulate click on the selected mesh
+                SimulateClickOnMesh(selectedMesh);
             }
         }
 
-
-        private void ShowAddMeshPopup(object sender, MouseButtonEventArgs e) 
-        { 
+        private void ShowAddMeshPopup(object sender, MouseButtonEventArgs e)
+        {
             if (e.RightButton == MouseButtonState.Pressed)
-            { 
-                System.Windows.Point mousePosition = e.GetPosition(this); 
-                var viewModel = DataContext as MainViewModel; 
-                viewModel?.ShowAddMeshPopupCommand.Execute(mousePosition); 
-            } 
+            {
+                System.Windows.Point mousePosition = e.GetPosition(this);
+                var viewModel = DataContext as MainViewModel;
+                viewModel?.ShowAddMeshPopupCommand.Execute(mousePosition);
+            }
+        }
+
+        private void SimulateClickOnMesh(MeshGeometryModel3D mesh)
+        {
+            // Convert world coordinates to screen position
+            var screenPosition = WorldToScreen(mesh.Bounds.Center);
+
+            // Perform hit testing at the screen position
+            var hitResult = HitTestAtScreenPosition(screenPosition);
+
+            if (hitResult?.ModelHit is MeshGeometryModel3D hitModel)
+            {
+                View1_MouseDown3DHandler(this, new MouseDown3DEventArgs(
+                    this,
+                    hitResult,
+                    screenPosition,
+                    view1,
+                    new MouseEventArgs(Mouse.PrimaryDevice, 0)
+                ));
+            }
+        }
+
+        private System.Windows.Point WorldToScreen(Vector3 point)
+        {
+            var viewport = view1;
+            var camera = viewport.Camera as ProjectionCamera;
+
+            if (camera == null)
+            {
+                throw new InvalidOperationException("Camera is not initialized.");
+            }
+
+            // Get the view and projection matrices from the camera using CameraExtensions
+            var viewMatrix = camera.CreateViewMatrix();
+            var projectionMatrix = camera.CreateProjectionMatrix((float)viewport.ActualWidth / (float)viewport.ActualHeight);
+
+            // Transform the point to screen coordinates
+            var worldPos = new Vector4(point, 1.0f);
+            var viewPos = Vector4.Transform(worldPos, viewMatrix);
+            var screenPos = Vector4.Transform(viewPos, projectionMatrix);
+
+            if (screenPos.W != 0)
+            {
+                screenPos /= screenPos.W;
+            }
+
+            var x = (screenPos.X + 1) / 2 * viewport.ActualWidth;
+            var y = (1 - screenPos.Y) / 2 * viewport.ActualHeight;
+
+            return new System.Windows.Point(x, y);
+        }
+
+        private HelixToolkit.Wpf.SharpDX.HitTestResult HitTestAtScreenPosition(System.Windows.Point screenPosition)
+        {
+            // Use HelixToolkit hit testing
+            var hitTestResult = view1.FindHits(screenPosition).FirstOrDefault();
+            return hitTestResult;
         }
     }
 }

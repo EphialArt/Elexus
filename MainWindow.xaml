@@ -9,7 +9,7 @@
         Width="1200"
         Height="800"
         mc:Ignorable="d"
-        Loaded="Window_Loaded">
+        Loaded="MainWindow_Loaded">
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
@@ -33,7 +33,7 @@
                         </TransformGroup>
                     </TextBlock.RenderTransform>
                 </TextBlock>
-                <ListView x:Name="objectview" ItemsSource="{Binding PartsCollection}" SelectedItem="{Binding SelectedPart}" SelectionChanged="ListView_SelectionChanged" Background="#FF1E1B20" BorderBrush="{x:Null}">
+                <ListView x:Name="objectview" ItemsSource="{Binding PartsCollection}" SelectedItem="{Binding SelectedPart, Mode=TwoWay}" SelectionChanged="ListView_SelectionChanged" Background="#FF1E1B20" BorderBrush="{x:Null}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -41,8 +41,10 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                </ListView>
+                    
 
+                </ListView>
+                
             </StackPanel>
             <!-- Transformation Panel -->
             <StackPanel Margin="10,0,0,10">

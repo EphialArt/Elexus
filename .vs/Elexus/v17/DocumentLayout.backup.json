@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\USER\\Documents\\GitHub\\Elexus\\CustomMeshGeometryModel3D.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CustomMeshGeometryModel3D.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|c:\\users\\user\\documents\\github\\elexus\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E26A27E-1A1F-4A3A-8D9C-46FE4F78DE2E}|Elexus.csproj|solutionrelative:mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,54 +30,42 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\App.xaml",
-              "RelativeDocumentMoniker": "App.xaml",
-              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\App.xaml",
-              "RelativeToolTip": "App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-23T17:45:54.156Z",
+              "DocumentIndex": 2,
+              "Title": "CustomMeshGeometryModel3D.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\CustomMeshGeometryModel3D.cs",
+              "RelativeDocumentMoniker": "CustomMeshGeometryModel3D.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\CustomMeshGeometryModel3D.cs",
+              "RelativeToolTip": "CustomMeshGeometryModel3D.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T15:40:46.946Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAAAlwD4AAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAawBcAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-05T13:12:10.821Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainViewModel.cs",
-              "RelativeDocumentMoniker": "MainViewModel.cs",
-              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainViewModel.cs",
-              "RelativeToolTip": "MainViewModel.cs",
-              "ViewState": "AgIAAK8BAAAAAAAAAAAAAMgBAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T16:23:52.617Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainWindow.xaml*",
+              "RelativeToolTip": "MainWindow.xaml*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2024-12-15T19:08:03.182Z",
               "EditorCaption": ""
@@ -85,12 +73,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "MainViewModel.cs",
+              "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\MainViewModel.cs",
+              "RelativeToolTip": "MainViewModel.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAWwMUAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T16:23:52.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "RelayCommand.cs",
               "DocumentMoniker": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\RelayCommand.cs",
               "RelativeDocumentMoniker": "RelayCommand.cs",
               "ToolTip": "C:\\Users\\USER\\Documents\\GitHub\\Elexus\\RelayCommand.cs",
               "RelativeToolTip": "RelayCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-23T15:28:16.568Z",
               "EditorCaption": ""
